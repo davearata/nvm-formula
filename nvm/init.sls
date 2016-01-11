@@ -41,6 +41,17 @@ nvm_{{ name }}:
     - require:
       - pkg: nvm_deps
 
+nvm_profile:
+  file.blockreplace:
+    - name: {{ home }}/.profile
+    - marker_start: "#> Saltstack Managed Configuration START <#"
+    - marker_end: "#> Saltstack Managed Configuration END <#"
+    - append_if_not_found: true
+    - content: |
+        if [ -f "{{ home }}/.nvm/nvm.sh" ]; then
+          source {{ home }}/.nvm/nvm.sh
+        fi
+
 nvm_deps:
   pkg.installed:
     - names:
